@@ -7,7 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>My Allowance Tracker</title>
-
+    <script>
+    if (localStorage.getItem("allowanceTheme") === "dark") {
+        document.documentElement.classList.add("dark-mode");
+    }
+</script>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -16,12 +20,25 @@
 <div class="container">
 
     <!-- HEADER -->
-    <header>
-        <div>
-            <h1>My Allowance Tracker</h1>
-            <p>Manage your money, one peso at a time.</p>
-        </div>
-    </header>
+   
+<header class="app-header">
+
+    <div class="header-info">
+        <h1>My Allowance Tracker</h1>
+        <p>Manage your money, one peso at a time.</p>
+    </div>
+
+    <button
+        type="button"
+        id="themeToggle"
+        class="theme-toggle"
+        aria-label="Switch to dark mode"
+        aria-pressed="false"
+    >
+        🌙 Dark Mode
+    </button>
+
+</header>
 
     <!-- MAIN LAYOUT -->
     <div class="main-layout">

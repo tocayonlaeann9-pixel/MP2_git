@@ -381,3 +381,30 @@ function initializeApp() {
 
 // Start application
 initializeApp();
+
+/* ===== DARK MODE TOGGLE ===== */
+
+const themeToggle = document.getElementById("themeToggle");
+
+function updateThemeButton() {
+    const isDark = document.documentElement.classList.contains("dark-mode");
+
+    themeToggle.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+    themeToggle.setAttribute("aria-pressed", String(isDark));
+    themeToggle.setAttribute(
+        "aria-label",
+        isDark ? "Switch to light mode" : "Switch to dark mode"
+    );
+}
+
+themeToggle.addEventListener("click", () => {
+    document.documentElement.classList.toggle("dark-mode");
+
+    const isDark = document.documentElement.classList.contains("dark-mode");
+
+    localStorage.setItem("allowanceTheme", isDark ? "dark" : "light");
+
+    updateThemeButton();
+});
+
+updateThemeButton();

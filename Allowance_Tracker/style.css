@@ -486,3 +486,146 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
+/* DARK MODE BUTTON POSITION */
+
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-info {
+    min-width: 0;
+}
+
+.theme-toggle {
+    flex-shrink: 0;
+    width: auto;
+    padding: 10px 15px;
+    border-radius: 20px;
+    background: #e9e0fa;
+    color: #6546a3;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.theme-toggle:hover {
+    background: #d9c8f5;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+    .theme-toggle {
+        padding: 9px 11px;
+        font-size: 11px;
+    }
+}
+
+/* ===== DARK MODE ===== */
+
+html {
+    color-scheme: light;
+}
+
+html.dark-mode {
+    color-scheme: dark;
+}
+
+.dark-mode body {
+    background: #171421;
+    color: #f3efff;
+}
+
+.dark-mode header h1,
+.dark-mode .history-header h2 {
+    color: #c6a8ff;
+}
+
+.dark-mode header p,
+.dark-mode .history-header p,
+.dark-mode .card h3,
+.dark-mode .transaction-info small {
+    color: #aaa2bd;
+}
+
+.dark-mode .card,
+.dark-mode .budget-section,
+.dark-mode .form-section,
+.dark-mode .history-sidebar {
+    background: #252033;
+    color: #f3efff;
+}
+
+.dark-mode .section-title,
+.dark-mode .budget-section h2,
+.dark-mode .form-section h2 {
+    color: #f3efff;
+}
+
+.dark-mode .budget-details p {
+    background: #332b46;
+    color: #c9bfdc;
+}
+
+.dark-mode .budget-details strong,
+.dark-mode .balance h2,
+.dark-mode #budgetMessage {
+    color: #c6a8ff;
+}
+
+.dark-mode input,
+.dark-mode select {
+    background: #332b46;
+    border-color: #514364;
+    color: #ffffff;
+}
+
+.dark-mode input::placeholder {
+    color: #aaa2bd;
+}
+
+.dark-mode .progress-container {
+    background: #443951;
+}
+
+.dark-mode #budgetProgress {
+    background: #a47be8;
+}
+
+.dark-mode .history-header,
+.dark-mode .transaction {
+    border-color: #443951;
+}
+
+.dark-mode .theme-toggle {
+    background: #443458;
+    color: #eadcff;
+}
+
+.dark-mode .theme-toggle:hover {
+    background: #594471;
+}
+
+.dark-mode .delete-btn {
+    background: #49303c;
+    color: #ffaaaa;
+}
+
+/* SMOOTH THEME TRANSITION */
+
+body,
+.card,
+.budget-section,
+.form-section,
+.history-sidebar,
+input,
+select,
+.theme-toggle {
+    transition: background-color 0.25s ease,
+                color 0.25s ease,
+                border-color 0.25s ease;
+}
