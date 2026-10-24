@@ -203,3 +203,57 @@ footer {
         flex-wrap: wrap;
     }
 }
+
+/* Monthly Budget */
+
+.budget-section {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.budget-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.budget-input input {
+    flex: 1;
+    min-width: 0;
+}
+
+.budget-details p {
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.progress-container {
+    width: 100%;
+    height: 15px;
+    background: #eee;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 20px 0 10px;
+}
+
+#budgetProgress {
+    width: 0%;
+    height: 100%;
+    background: #8661c1;
+    border-radius: 20px;
+    transition: width 0.3s ease;
+}
+
+#budgetMessage {
+    font-size: 14px;
+    color: #7651b5;
+}
+
+@media (max-width: 650px) {
+    .budget-input {
+        flex-direction: column;
+    }
+}

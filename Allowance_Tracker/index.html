@@ -36,6 +36,35 @@
         </section>
 
         <section class="form-section">
+            
+            <section class="budget-section">
+
+                <h2>Monthly Budget</h2>
+
+                <div class="budget-input">
+             <input
+                 type="number"
+                 id="monthlyBudget"
+                 placeholder="Enter monthly budget (₱)"
+                 min="1"
+                 step="0.01"
+             >
+                <button type="button" id="saveBudget">Set Budget</button>  
+                </div>
+
+                <div class="budget-details">
+                 <p>Monthly Budget: <strong id="budgetAmount">₱0.00</strong></p>
+                 <p>Spent This Month: <strong id="monthlySpent">₱0.00</strong></p>
+                 <p>Budget Left: <strong id="budgetLeft">₱0.00</strong></p>
+                </div>
+
+                <div class="progress-container">
+                <div id="budgetProgress"></div>
+                </div>
+
+                  <p id="budgetMessage"></p>
+
+</section>
 
             <h2>Add Transaction</h2>
 
