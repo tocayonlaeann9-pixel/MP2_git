@@ -1,0 +1,205 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f5f3ff;
+    color: #333;
+    padding: 30px 15px;
+}
+
+.container {
+    max-width: 950px;
+    margin: auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    color: #6546a3;
+    font-size: 32px;
+}
+
+header p {
+    color: #777;
+    margin-top: 10px;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.card h3 {
+    font-size: 15px;
+    margin-bottom: 15px;
+    color: #666;
+}
+
+.card h2 {
+    font-size: 27px;
+}
+
+.balance {
+    border-top: 5px solid #8661c1;
+}
+
+.income {
+    border-top: 5px solid #49a078;
+}
+
+.expense {
+    border-top: 5px solid #e57373;
+}
+
+.balance h2 {
+    color: #7651b5;
+}
+
+.income h2 {
+    color: #49a078;
+}
+
+.expense h2 {
+    color: #e57373;
+}
+
+.form-section,
+.history {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+input,
+select {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #8661c1;
+}
+
+button {
+    background: #7651b5;
+    color: white;
+    padding: 13px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+button:hover {
+    background: #58368e;
+}
+
+.transaction {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.transaction-info {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.transaction-info small {
+    color: #888;
+}
+
+.transaction-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.positive {
+    color: #49a078;
+    font-weight: bold;
+}
+
+.negative {
+    color: #e57373;
+    font-weight: bold;
+}
+
+.delete-btn {
+    background: #ffeded;
+    color: #d64545;
+    padding: 7px 12px;
+}
+
+.delete-btn:hover {
+    background: #ffd5d5;
+}
+
+.empty {
+    text-align: center;
+    color: #999;
+    padding: 20px;
+}
+
+footer {
+    text-align: center;
+    color: #999;
+    margin-top: 30px;
+    font-size: 13px;
+}
+
+@media (max-width: 650px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    header h1 {
+        font-size: 26px;
+    }
+
+    .transaction {
+        flex-wrap: wrap;
+    }
+}
