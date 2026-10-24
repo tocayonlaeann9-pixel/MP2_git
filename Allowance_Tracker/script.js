@@ -3,6 +3,7 @@ const form = document.getElementById("transactionForm");
 const descriptionInput = document.getElementById("description");
 const amountInput = document.getElementById("amount");
 const typeInput = document.getElementById("type");
+const categoryInput = document.getElementById("category");
 
 const balanceDisplay = document.getElementById("balance");
 const incomeDisplay = document.getElementById("income");
@@ -48,12 +49,14 @@ form.addEventListener("submit", function(event) {
     const description = descriptionInput.value.trim();
     const amount = Number(amountInput.value);
     const type = typeInput.value;
+    const category= categoryInput.value;
 
     if (
         description === "" ||
         !Number.isFinite(amount) ||
         amount <= 0 ||
-        !["income", "expense"].includes(type)
+        !["income", "expense"].includes(type) ||
+        category === ""
     ) {
         alert("Please enter valid transaction details.");
         return;
@@ -64,6 +67,7 @@ form.addEventListener("submit", function(event) {
         description: description,
         amount: Math.round(amount * 100) / 100,
         type: type,
+        category: category,
         date: new Date().toLocaleDateString("en-PH")
     };
 
@@ -124,7 +128,7 @@ function displayTransactions() {
         title.textContent = transaction.description;
 
         const date = document.createElement("small");
-        date.textContent = transaction.date;
+        date.textContent = (transaction.category || "Uncategorized") + "." + transaction.date;
 
         info.appendChild(title);
         info.appendChild(document.createElement("br"));
