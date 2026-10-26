@@ -16,6 +16,8 @@ const expenseDisplay = document.getElementById("expense");
 // Transaction history and search
 const transactionList = document.getElementById("transactionList");
 const searchTransaction = document.getElementById("searchTransaction");
+const filterButtons = document.querySelectorAll(".filter-btn");
+let activeFilter = "all";
 
 // Monthly budget elements
 const budgetInput = document.getElementById("monthlyBudget");
@@ -26,6 +28,7 @@ const themeToggle = document.getElementById("themeToggle");
 
 // Load saved transactions
 let transactions = [];
+
 
 try {
     const saved = JSON.parse(
@@ -160,18 +163,17 @@ function displayTransactions() {
     const searchText = searchTransaction.value.toLowerCase().trim();
 
     // Filter by description or category
-    const filteredTransactions = transactions.filter(function(transaction) {
+    const filteredTransactions =transactions.filter(function(transaction){
+        const description = (transaction.description || "").toLowerCase();
 
-        const description =
-            (transaction.description || "").toLowerCase();
+        const category =(transaction.category || "").toLowerCase();
 
-        const category =
-            (transaction.category || "").toLowerCase();
+        //check search text
+        const matchesSearch = description.includes(searchText) || category.includes(searchText);
 
-        return (
-            description.includes(searchText) ||
-            category.includes(searchText)
-        );
+        //Check selected filter button
+        const matchesType = activeFilter === "all" || transaction.type === activeFilter;
+        return matchesSearch && matchesType;
     });
 
     // Show message if no transactions match
@@ -468,3 +470,24 @@ function initializeApp() {
 
 // Start Allowance Tracker
 initializeApp();
+
+/* === TRANSACTION TYPE FILTER =====*/
+
+filterButtons.forEach(function(button){
+    button.addEventListener("click", function(){
+        
+        //get selected filter
+        activeFilter =button.dataset.filter;
+
+        //remove active style from all the buttons
+        filterButtons.forEach(function(btn){
+            btn.classList.remove("active");
+        });
+
+        //highlight selected button
+        button.classList.add("active");
+
+        //refresh transaction history
+        displayTransactions();
+    });
+});

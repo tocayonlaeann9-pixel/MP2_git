@@ -177,8 +177,8 @@
     </button>
 
 </form>
-
-            </section>
+           
+</section>
 
         </main>
 
@@ -194,6 +194,23 @@
                     aria-label="Search Transaction">
                 </div>
             </div>
+
+            <!--Transaction Type Filters-->
+                <div class="filter-buttons">
+                   
+                    <button type="button"
+                    class="filter-btn active"
+                    data-filter="all">All</button>
+
+                    <button type="button"
+                    class="filter-btn"
+                    data-filter="income">Allowance</button>
+
+                    <button type="button" 
+                    class="filter-btn"
+                    data-filter="expense">Expenses</button>
+                </div>
+
             <div id="transactionList"></div>
          </aside>
            

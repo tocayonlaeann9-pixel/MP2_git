@@ -671,3 +671,67 @@ select,
 .dark-mode #searchTransaction::placeholder {
     color: #aaa2bd;
 }
+
+/* ===== TRANSACTION FILTER BUTTONS ===== */
+
+.filter-buttons {
+    display: flex;
+    gap: 7px;
+    margin-top: 12px;
+    width: 100%;
+}
+
+.filter-btn {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 5px;
+    border: none;
+    border-radius: 8px;
+
+    background: #f1ecfa;
+    color: #7651b5;
+
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+
+    /* Smooth color change only */
+    transition: background-color 0.25s ease,
+                color 0.25s ease;
+}
+
+/* Selected button */
+
+.filter-btn.active {
+    background: #7651b5;
+    color: white;
+}
+
+/* DARK MODE */
+
+.dark-mode .filter-btn {
+    background: #332b46;
+    color: #d5bcff;
+}
+
+.dark-mode .filter-btn.active {
+    background: #a47be8;
+    color: #171421;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+    .filter-btn {
+        font-size: 10px;
+        padding: 9px 4px;
+    }
+}
+
+/* REDUCED MOTION */
+
+@media (prefers-reduced-motion: reduce) {
+    .filter-btn {
+        transition: none;
+    }
+}
