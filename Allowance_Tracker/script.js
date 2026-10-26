@@ -1,18 +1,28 @@
 
+/* ===== ALLOWANCE TRACKER ===== */
+
+// Transaction form elements
 const form = document.getElementById("transactionForm");
 const descriptionInput = document.getElementById("description");
 const amountInput = document.getElementById("amount");
 const typeInput = document.getElementById("type");
 const categoryInput = document.getElementById("category");
 
+// Dashboard elements
 const balanceDisplay = document.getElementById("balance");
 const incomeDisplay = document.getElementById("income");
 const expenseDisplay = document.getElementById("expense");
-const transactionList = document.getElementById("transactionList");
 
-// Monthly Budget Elements
+// Transaction history and search
+const transactionList = document.getElementById("transactionList");
+const searchTransaction = document.getElementById("searchTransaction");
+
+// Monthly budget elements
 const budgetInput = document.getElementById("monthlyBudget");
 const saveBudgetBtn = document.getElementById("saveBudget");
+
+// Dark mode button
+const themeToggle = document.getElementById("themeToggle");
 
 // Load saved transactions
 let transactions = [];
@@ -50,7 +60,7 @@ function saveTransactions() {
     );
 }
 
-// Get today's LOCAL date
+// Get today's local date
 function getTodayDate() {
     const today = new Date();
 
@@ -58,10 +68,11 @@ function getTodayDate() {
     const month = String(today.getMonth() + 1).padStart(2, "0");
     const day = String(today.getDate()).padStart(2, "0");
 
-    return `${year}-${month}-${day}`;
+    return $`{year}-${month}-${day}`;
 }
 
-// Add new transaction
+/* ===== ADD TRANSACTION ===== */
+
 form.addEventListener("submit", function(event) {
 
     event.preventDefault();
@@ -83,7 +94,7 @@ form.addEventListener("submit", function(event) {
         return;
     }
 
-    // Create transaction
+    // Create new transaction
     const transaction = {
         id: crypto.randomUUID(),
         description: description,
@@ -93,22 +104,20 @@ form.addEventListener("submit", function(event) {
         date: getTodayDate()
     };
 
-    // Add to transaction list
     transactions.push(transaction);
 
-    // Save changes
+    // Save and refresh
     saveTransactions();
-
-    // Update dashboard and budget
     updateDashboard();
     displayTransactions();
 
     // Clear form
     form.reset();
-
 });
 
-// Update dashboard
+
+/* ===== UPDATE DASHBOARD ===== */
+
 function updateDashboard() {
 
     let totalIncome = 0;
@@ -130,26 +139,55 @@ function updateDashboard() {
     incomeDisplay.textContent = formatMoney(totalIncome);
     expenseDisplay.textContent = formatMoney(totalExpense);
 
-    // Update monthly budget automatically
+    // Update monthly budget too
     updateBudget();
 }
 
-// Display transaction history
+/* ===== DISPLAY AND SEARCH TRANSACTIONS ===== */
+
 function displayTransactions() {
 
     transactionList.innerHTML = "";
 
+    // Check if there are saved transactions
     if (transactions.length === 0) {
         transactionList.innerHTML =
             '<p class="empty">No transactions yet.</p>';
         return;
     }
 
-    [...transactions].reverse().forEach(function(transaction) {
+    // Get text entered in the search bar
+    const searchText = searchTransaction.value.toLowerCase().trim();
+
+    // Filter by description or category
+    const filteredTransactions = transactions.filter(function(transaction) {
+
+        const description =
+            (transaction.description || "").toLowerCase();
+
+        const category =
+            (transaction.category || "").toLowerCase();
+
+        return (
+            description.includes(searchText) ||
+            category.includes(searchText)
+        );
+    });
+
+    // Show message if no transactions match
+    if (filteredTransactions.length === 0) {
+        transactionList.innerHTML =
+            '<p class="empty">No matching transactions found.</p>';
+        return;
+    }
+
+    // Display newest transactions first
+    [...filteredTransactions].reverse().forEach(function(transaction) {
 
         const item = document.createElement("div");
         item.className = "transaction";
 
+        // Transaction information
         const info = document.createElement("div");
         info.className = "transaction-info";
 
@@ -157,7 +195,6 @@ function displayTransactions() {
         title.textContent = transaction.description;
 
         const date = document.createElement("small");
-
         date.textContent =
             (transaction.category || "Uncategorized") +
             " • " +
@@ -167,6 +204,7 @@ function displayTransactions() {
         info.appendChild(document.createElement("br"));
         info.appendChild(date);
 
+        // Transaction amount and actions
         const actions = document.createElement("div");
         actions.className = "transaction-actions";
 
@@ -198,11 +236,17 @@ function displayTransactions() {
         item.appendChild(actions);
 
         transactionList.appendChild(item);
-
     });
 }
 
-// Delete transaction
+
+/* ===== REAL-TIME SEARCH ===== */
+
+searchTransaction.addEventListener("input", displayTransactions);
+
+
+/* ===== DELETE TRANSACTION ===== */
+
 function deleteTransaction(id) {
 
     const confirmDelete = confirm(
@@ -218,13 +262,12 @@ function deleteTransaction(id) {
     });
 
     saveTransactions();
-
-    // Refresh everything
     updateDashboard();
     displayTransactions();
 }
 
-// Save monthly budget
+/* ===== SAVE MONTHLY BUDGET ===== */
+
 saveBudgetBtn.addEventListener("click", function() {
 
     const amount = Number(budgetInput.value);
@@ -244,10 +287,11 @@ saveBudgetBtn.addEventListener("click", function() {
     budgetInput.value = "";
 
     updateBudget();
-
 });
 
-// Convert transaction date
+
+/* ===== CONVERT TRANSACTION DATE ===== */
+
 function parseTransactionDate(dateString) {
 
     if (typeof dateString !== "string") {
@@ -262,14 +306,15 @@ function parseTransactionDate(dateString) {
         [year, month, day] = dateString.split("-").map(Number);
 
     }
-    // Old format: DD/MM/YYYY or MM/DD/YYYY
+    // Older saved records: MM/DD/YYYY
     else if (dateString.includes("/")) {
 
         const parts = dateString.split("/").map(Number);
 
-        if (parts.length !== 3) return null;
+        if (parts.length !== 3) {
+            return null;
+        }
 
-        // Existing en-PH records use MM/DD/YYYY
         [month, day, year] = parts;
 
     } else {
@@ -290,7 +335,9 @@ function parseTransactionDate(dateString) {
     return parsed;
 }
 
-// Update monthly budget
+
+/* ===== UPDATE MONTHLY BUDGET ===== */
+
 function updateBudget() {
 
     const now = new Date();
@@ -309,7 +356,9 @@ function updateBudget() {
         const transactionDate =
             parseTransactionDate(transaction.date);
 
-        if (!transactionDate) return;
+        if (!transactionDate) {
+            return;
+        }
 
         if (
             transactionDate.getMonth() === currentMonth &&
@@ -317,7 +366,6 @@ function updateBudget() {
         ) {
             monthlySpent += transaction.amount;
         }
-
     });
 
     const budgetLeft = monthlyBudget - monthlySpent;
@@ -367,44 +415,56 @@ function updateBudget() {
     }
 }
 
-// Initialize Allowance Tracker
-
-function initializeApp() {
-
-    // Display total allowance, expenses, and balance
-    updateDashboard();
-
-    // Display saved transaction history
-    displayTransactions();
-
-}
-
-// Start application
-initializeApp();
-
 /* ===== DARK MODE TOGGLE ===== */
 
-const themeToggle = document.getElementById("themeToggle");
-
 function updateThemeButton() {
-    const isDark = document.documentElement.classList.contains("dark-mode");
 
-    themeToggle.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
-    themeToggle.setAttribute("aria-pressed", String(isDark));
+    const isDark =
+        document.documentElement.classList.contains("dark-mode");
+
+    themeToggle.textContent =
+        isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+
+    themeToggle.setAttribute(
+        "aria-pressed",
+        String(isDark)
+    );
+
     themeToggle.setAttribute(
         "aria-label",
         isDark ? "Switch to light mode" : "Switch to dark mode"
     );
 }
 
-themeToggle.addEventListener("click", () => {
+themeToggle.addEventListener("click", function() {
+
     document.documentElement.classList.toggle("dark-mode");
 
-    const isDark = document.documentElement.classList.contains("dark-mode");
+    const isDark =
+        document.documentElement.classList.contains("dark-mode");
 
-    localStorage.setItem("allowanceTheme", isDark ? "dark" : "light");
+    localStorage.setItem(
+        "allowanceTheme",
+        isDark ? "dark" : "light"
+    );
 
     updateThemeButton();
 });
 
-updateThemeButton();
+
+/* ===== INITIALIZE APPLICATION ===== */
+
+function initializeApp() {
+
+    // Load dashboard totals and budget
+    updateDashboard();
+
+    // Display saved transactions
+    displayTransactions();
+
+    // Display correct theme button label
+    updateThemeButton();
+}
+
+// Start Allowance Tracker
+initializeApp();

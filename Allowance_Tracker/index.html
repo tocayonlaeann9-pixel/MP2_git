@@ -183,18 +183,20 @@
         </main>
 
         <!-- RIGHT SIDE: TRANSACTION HISTORY -->
-        <aside class="history-sidebar">
-
+         <aside class="history-sidebar">
             <div class="history-header">
                 <h2>Transaction History</h2>
-                <p>Your recent activities</p>
+                <p>Your Recent activities</p>
+                <div class="search-container">
+                    <input type="search"
+                    id="searchTransaction" 
+                    placeholder="🔍 Search Transaction..." 
+                    aria-label="Search Transaction">
+                </div>
             </div>
-
             <div id="transactionList"></div>
-
-        </aside>
-
-    </div>
+         </aside>
+           
 
     <footer>
         <p>My Allowance Tracker | Student Project</p>

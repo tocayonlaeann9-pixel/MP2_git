@@ -629,3 +629,45 @@ select,
                 color 0.25s ease,
                 border-color 0.25s ease;
 }
+
+/* ===== TRANSACTION SEARCH BAR ===== */
+
+.history-header {
+    padding-bottom: 12px;
+}
+
+.history-header h2 {
+    margin-bottom: 4px;
+}
+
+.search-container {
+    margin-top: 12px;
+}
+
+#searchTransaction {
+    width: 100%;
+    height: 36px;
+    padding: 8px 12px;
+    border: 1px solid #e5e2ee;
+    border-radius: 8px;
+    background: #f8f6ff;
+    color: #333;
+    font-size: 12px;
+}
+
+#searchTransaction:focus {
+    outline: none;
+    border-color: #8661c1;
+}
+
+/* DARK MODE SUPPORT */
+
+.dark-mode #searchTransaction {
+    background: #332b46;
+    border-color: #514364;
+    color: #fff;
+}
+
+.dark-mode #searchTransaction::placeholder {
+    color: #aaa2bd;
+}
