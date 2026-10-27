@@ -16,6 +16,7 @@ const expenseDisplay = document.getElementById("expense");
 // Transaction history and search
 const transactionList = document.getElementById("transactionList");
 const searchTransaction = document.getElementById("searchTransaction");
+const sortTransaction = document.getElementById("sortTransaction")
 const filterButtons = document.querySelectorAll(".filter-btn");
 let activeFilter = "all";
 
@@ -184,7 +185,11 @@ function displayTransactions() {
     }
 
     // Display newest transactions first
-    [...filteredTransactions].reverse().forEach(function(transaction) {
+    const sortedTransactions = [...filteredTransactions];
+    if (sortTransaction.value ==="newest"){
+        sortedTransactions.reverse();
+    }
+    sortedTransactions.forEach(function(transaction){
 
         const item = document.createElement("div");
         item.className = "transaction";
@@ -490,4 +495,10 @@ filterButtons.forEach(function(button){
         //refresh transaction history
         displayTransactions();
     });
+});
+
+/* ===== TRANSACTION SORTING ===== */
+
+sortTransaction.addEventListener("change", function() {
+    displayTransactions();
 });

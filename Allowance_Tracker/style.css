@@ -735,3 +735,42 @@ select,
         transition: none;
     }
 }
+
+/* ===== TRANSACTION SORTING ===== */
+
+.sort-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.sort-container label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #7651b5;
+}
+
+.sort-container select {
+    padding: 8px 10px;
+    border: 1px solid #e3d7f7;
+    border-radius: 7px;
+    background: #f8f5fd;
+    color: #7651b5;
+    font-size: 11px;
+    cursor: pointer;
+    outline: none;
+}
+
+/* Dark Mode */
+
+.dark-mode .sort-container label {
+    color: #d5bcff;
+}
+
+.dark-mode .sort-container select {
+    background: #332b46;
+    color: #d5bcff;
+    border-color: #49395f;
+}
