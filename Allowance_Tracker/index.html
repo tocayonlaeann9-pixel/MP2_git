@@ -7,231 +7,254 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>My Allowance Tracker</title>
+
     <script>
-    if (localStorage.getItem("allowanceTheme") === "dark") {
-        document.documentElement.classList.add("dark-mode");
-    }
-</script>
+        if (localStorage.getItem("allowanceTheme") === "dark") {
+            document.documentElement.classList.add("dark-mode");
+        }
+    </script>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <!-- HEADER -->
-   
-<header class="app-header">
+        <!-- HEADER -->
+        <header class="app-header">
 
-    <div class="header-info">
-        <h1>My Allowance Tracker</h1>
-        <p>Manage your money, one peso at a time.</p>
+            <div class="header-info">
+                <h1>My Allowance Tracker</h1>
+                <p>Manage your money, one peso at a time.</p>
+            </div>
+
+            <button
+                type="button"
+                id="themeToggle"
+                class="theme-toggle"
+                aria-label="Switch to dark mode"
+                aria-pressed="false"
+            >
+                🌙 Dark Mode
+            </button>
+
+        </header>
+
+
+<!-- MAIN LAYOUT -->
+        <div class="main-layout">
+
+            <!-- LEFT SIDE -->
+            <main class="main-content">
+
+                <h2 class="section-title">Dashboard</h2>
+
+                <!-- DASHBOARD CARDS -->
+                <section class="dashboard">
+
+                    <div class="card balance">
+                        <h3>Remaining Balance</h3>
+                        <h2 id="balance">₱0.00</h2>
+                    </div>
+
+                    <div class="card income">
+                        <h3>Total Allowance</h3>
+                        <h2 id="income">₱0.00</h2>
+                    </div>
+
+                    <div class="card expense">
+                        <h3>Total Expenses</h3>
+                        <h2 id="expense">₱0.00</h2>
+                    </div>
+
+                </section>
+ 
+
+<!-- MONTHLY BUDGET -->
+<section class="budget-section">
+
+    <h2>Monthly Budget</h2>
+
+    <div class="budget-details">
+
+        <p>
+            Monthly Budget:
+            <strong id="budgetAmount">₱0.00</strong>
+        </p>
+
+        <p>
+            Spent This Month:
+            <strong id="monthlySpent">₱0.00</strong>
+        </p>
+
+        <p>
+            Budget Left:
+            <strong id="budgetLeft">₱0.00</strong>
+        </p>
+
     </div>
 
-    <button
-        type="button"
-        id="themeToggle"
-        class="theme-toggle"
-        aria-label="Switch to dark mode"
-        aria-pressed="false"
-    >
-        🌙 Dark Mode
-    </button>
+    <div class="progress-container">
+        <div id="budgetProgress"></div>
+    </div>
 
-</header>
+    <p id="budgetMessage"></p>
 
-    <!-- MAIN LAYOUT -->
-    <div class="main-layout">
+</section>
 
-        <!-- LEFT SIDE -->
-        <main class="main-content">
+<!-- ADD TRANSACTION -->
+                <section class="form-section">
 
-            <h2 class="section-title">Dashboard</h2>
+                    <h2>Add Transaction</h2>
 
-            <!-- DASHBOARD CARDS -->
-            <section class="dashboard">
+                    <form id="transactionForm">
 
-                <div class="card balance">
-                    <h3>Remaining Balance</h3>
-                    <h2 id="balance">₱0.00</h2>
+                        <div class="form-grid">
+
+                            <div class="input-group">
+                                <label for="description">Description</label>
+                                <input
+                                    type="text"
+                                    id="description"
+                                    placeholder="e.g. Lunch"
+                                    required
+                                >
+                            </div>
+
+                            <div class="input-group">
+                                <label for="amount">Amount (₱)</label>
+                                <input
+                                    type="number"
+                                    id="amount"
+                                    placeholder="0.00"
+                                    min="0.01"
+                                    step="0.01"
+                                    required
+                                >
+                            </div>
+
+                            <div class="input-group">
+                                <label for="type">Transaction Type</label>
+                                <select id="type">
+                                    <option value="income">Allowance</option>
+                                    <option value="expense">Expense</option>
+                                </select>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="category">Category</label>
+                                <select id="category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Allowance">Allowance</option>
+                                    <option value="Food">Food</option>
+                                    <option value="Transportation">Transportation</option>
+                                    <option value="School Supplies">School Supplies</option>
+                                    <option value="Shopping">Shopping</option>
+                                    <option value="Savings">Savings</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="add-btn"
+                            id="submitTransaction"
+                        >
+                            + Add Transaction
+                        </button>
+
+                        <button
+                            type="button"
+                            id="cancelEdit"
+                            style="display: none;"
+                        >
+                            Cancel
+                        </button>
+
+                    </form>
+
+                </section>
+
+            </main>
+
+  
+<!-- RIGHT SIDE: TRANSACTION HISTORY -->
+            <aside class="history-sidebar">
+
+                <div class="history-header">
+
+                    <h2>Transaction History</h2>
+                    <p>Your Recent activities</p>
+
+                    <div class="search-container">
+                        <input
+                            type="search"
+                            id="searchTransaction"
+                            placeholder="🔍 Search Transaction..."
+                            aria-label="Search Transaction"
+                        >
+                    </div>
+
                 </div>
 
-                <div class="card income">
-                    <h3>Total Allowance</h3>
-                    <h2 id="income">₱0.00</h2>
-                </div>
+                <!-- TRANSACTION TYPE FILTERS -->
+                <div class="filter-buttons">
 
-                <div class="card expense">
-                    <h3>Total Expenses</h3>
-                    <h2 id="expense">₱0.00</h2>
-                </div>
-
-            </section>
-
-            <!-- MONTHLY BUDGET -->
-            <section class="budget-section">
-
-                <h2>Monthly Budget</h2>
-
-                <div class="budget-input">
-
-                    <input
-                        type="number"
-                        id="monthlyBudget"
-                        placeholder="Enter monthly budget (₱)"
-                        min="1"
-                        step="0.01"
+                    <button
+                        type="button"
+                        class="filter-btn active"
+                        data-filter="all"
                     >
+                        All
+                    </button>
 
-                    <button type="button" id="saveBudget">
-                        Set Budget
+                    <button
+                        type="button"
+                        class="filter-btn"
+                        data-filter="income"
+                    >
+                        Allowance
+                    </button>
+
+                    <button
+                        type="button"
+                        class="filter-btn"
+                        data-filter="expense"
+                    >
+                        Expenses
                     </button>
 
                 </div>
 
-                <div class="budget-details">
+                <!-- TRANSACTION SORTING -->
+                <div class="sort-container">
 
-                    <p>
-                        Monthly Budget:
-                        <strong id="budgetAmount">₱0.00</strong>
-                    </p>
+                    <label for="sortTransaction">Sort by:</label>
 
-                    <p>
-                        Spent This Month:
-                        <strong id="monthlySpent">₱0.00</strong>
-                    </p>
-
-                    <p>
-                        Budget Left:
-                        <strong id="budgetLeft">₱0.00</strong>
-                    </p>
+                    <select id="sortTransaction">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                    </select>
 
                 </div>
 
-                <div class="progress-container">
-                    <div id="budgetProgress"></div>
-                </div>
+                <div id="transactionList"></div>
 
-                <p id="budgetMessage"></p>
+            </aside>
 
-            </section>
-
-            <!-- ADD TRANSACTION -->
-            <section class="form-section">
-
-                <h2>Add Transaction</h2>
-
-                
-<form id="transactionForm">
-
-    <div class="form-grid">
-
-        <div class="input-group">
-            <label for="description">Description</label>
-            <input
-                type="text"
-                id="description"
-                placeholder="e.g. Lunch"
-                required
-            >
         </div>
 
-        <div class="input-group">
-            <label for="amount">Amount (₱)</label>
-            <input
-                type="number"
-                id="amount"
-                placeholder="0.00"
-                min="0.01"
-                step="0.01"
-                required
-            >
-        </div>
-
-        <div class="input-group">
-            <label for="type">Transaction Type</label>
-            <select id="type">
-                <option value="income">Allowance</option>
-                <option value="expense">Expense</option>
-            </select>
-        </div>
-
-        <div class="input-group">
-            <label for="category">Category</label>
-            <select id="category" required>
-                <option value="">Select Category</option>
-                <option value="Allowance">💵 Allowance</option>
-                <option value="Food">🍔 Food</option>
-                <option value="Transportation">🚌 Transportation</option>
-                <option value="School Supplies">📚 School Supplies</option>
-                <option value="Shopping">🛍️ Shopping</option>
-                <option value="Savings">💰 Savings</option>
-                <option value="Others">📦 Others</option>
-            </select>
-        </div>
+        <!-- FOOTER -->
+        <footer>
+            <p>My Allowance Tracker | Student Project</p>
+        </footer>
 
     </div>
 
-    <button type="submit" class="add-btn">
-        + Add Transaction
-    </button>
-
-</form>
-           
-</section>
-
-        </main>
-
-        <!-- RIGHT SIDE: TRANSACTION HISTORY -->
-         <aside class="history-sidebar">
-            <div class="history-header">
-                <h2>Transaction History</h2>
-                <p>Your Recent activities</p>
-                <div class="search-container">
-                    <input type="search"
-                    id="searchTransaction" 
-                    placeholder="🔍 Search Transaction..." 
-                    aria-label="Search Transaction">
-                </div>
-            </div>
-
-            <!--Transaction Type Filters-->
-                <div class="filter-buttons">
-                   
-                    <button type="button"
-                    class="filter-btn active"
-                    data-filter="all">All</button>
-
-                    <button type="button"
-                    class="filter-btn"
-                    data-filter="income">Allowance</button>
-
-                    <button type="button" 
-                    class="filter-btn"
-                    data-filter="expense">Expenses</button>
-                </div>
-                
-        <!-- Transaction Sorting -->
-            <div class="sort-container">
-                <label for="sortTransaction">Sort by:</label>
-
-                <select id="sortTransaction">
-                <option value="newest">Newest First</option>
-                <option value="oldest">Oldest First</option>
-                 </select>
-            </div>
-            
-            <div id="transactionList"></div>
-         </aside>
-           
-
-    <footer>
-        <p>My Allowance Tracker | Student Project</p>
-    </footer>
-
-</div>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 
 </body>
-</html>
+</html>         
