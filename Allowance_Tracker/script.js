@@ -44,8 +44,7 @@ const themeToggle = document.getElementById("themeToggle");
 let transactions = [];
 
 try {
-    const savedTransactions =
-        localStorage.getItem("allowanceTransactions");
+    const savedTransactions = localStorage.getItem("allowanceTransactions");
 
     if (savedTransactions) {
         const parsedTransactions = JSON.parse(savedTransactions);
@@ -58,7 +57,7 @@ try {
     console.error("Error loading transactions:", error);
 }
 
-let editingTransactionId = null;s
+let editingTransactionId = null;
 let activeFilter = "all";
 
 // ===== SAVE TRANSACTIONS =====
@@ -69,14 +68,10 @@ function saveTransactions() {
             "allowanceTransactions",
             JSON.stringify(transactions)
         );
-
         return true;
-
     } catch (error) {
         console.error("Error saving transactions:", error);
-
         alert("Unable to save your transactions. Check your browser storage.");
-
         return false;
     }
 }
@@ -108,9 +103,7 @@ function parseTransactionDate(dateString) {
     if (!dateString) return null;
 
     // Handle YYYY-MM-DD without timezone shifting
-    const dateOnly = String(dateString).match(
-        /^(\d{4})-(\d{2})-(\d{2})$/
-    );
+    const dateOnly = String(dateString).match(/^(\d{4})-(\d{2})-(\d{2})$/);
 
     if (dateOnly) {
         return new Date(
@@ -121,9 +114,7 @@ function parseTransactionDate(dateString) {
     }
 
     // Handle older MM/DD/YYYY dates
-    const oldDate = String(dateString).match(
-        /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
-    );
+    const oldDate = String(dateString).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
 
     if (oldDate) {
         return new Date(
@@ -137,6 +128,7 @@ function parseTransactionDate(dateString) {
 
     return Number.isNaN(parsed.getTime()) ? null : parsed;
 }
+
 
 /* =====================================
    PART 2 - ADD AND UPDATE TRANSACTIONS
@@ -169,8 +161,7 @@ form.addEventListener("submit", function(event) {
 
         if (index !== -1) {
             transactions[index].description = description;
-            transactions[index].amount =
-                Math.round(amount * 100) / 100;
+            transactions[index].amount = Math.round(amount * 100) / 100;
             transactions[index].type = type;
             transactions[index].category = category;
         }
@@ -183,9 +174,7 @@ form.addEventListener("submit", function(event) {
     } else {
 
         const transaction = {
-            id: Date.now().toString() +
-                Math.random().toString(36).slice(2),
-
+            id: Date.now().toString() + Math.random().toString(36).slice(2),
             description: description,
             amount: Math.round(amount * 100) / 100,
             type: type,
@@ -211,12 +200,10 @@ function updateDashboard() {
     let totalExpense = 0;
 
     transactions.forEach(function(transaction) {
-
         const amount = Number(transaction.amount) || 0;
 
         if (transaction.type === "income") {
             totalIncome += amount;
-
         } else if (transaction.type === "expense") {
             totalExpense += amount;
         }
@@ -246,31 +233,26 @@ function displayTransactions() {
         return;
     }
 
-    const searchText =
-        searchTransaction.value.toLowerCase().trim();
+    const searchText = searchTransaction.value.toLowerCase().trim();
 
-    // ===== SEARCH AND FILTER =====
+    const filteredTransactions = transactions.filter(function(transaction) {
 
-    const filteredTransactions = transactions.filter(
-        function(transaction) {
+        const description =
+            (transaction.description || "").toLowerCase();
 
-            const description =
-                (transaction.description || "").toLowerCase();
+        const category =
+            (transaction.category || "").toLowerCase();
 
-            const category =
-                (transaction.category || "").toLowerCase();
+        const matchesSearch =
+            description.includes(searchText) ||
+            category.includes(searchText);
 
-            const matchesSearch =
-                description.includes(searchText) ||
-                category.includes(searchText);
+        const matchesType =
+            activeFilter === "all" ||
+            transaction.type === activeFilter;
 
-            const matchesType =
-                activeFilter === "all" ||
-                transaction.type === activeFilter;
-
-            return matchesSearch && matchesType;
-        }
-    );
+        return matchesSearch && matchesType;
+    });
 
     if (filteredTransactions.length === 0) {
         transactionList.innerHTML =
@@ -278,45 +260,26 @@ function displayTransactions() {
         return;
     }
 
-    // ===== SORT TRANSACTIONS =====
-
-    const sortOrder = sortTransaction.value;
-
-    const sortedTransactions = filteredTransactions
-        .map(function(transaction, index) {
-            return {
-                transaction: transaction,
-                originalIndex: index
-            };
-        });
+    const sortedTransactions = [...filteredTransactions];
 
     sortedTransactions.sort(function(a, b) {
-
-        const dateA = parseTransactionDate(a.transaction.date);
-        const dateB = parseTransactionDate(b.transaction.date);
+        const dateA = parseTransactionDate(a.date);
+        const dateB = parseTransactionDate(b.date);
 
         const timeA = dateA ? dateA.getTime() : 0;
         const timeB = dateB ? dateB.getTime() : 0;
 
-        if (timeA !== timeB) {
-
-            return sortOrder === "oldest"
-                ? timeA - timeB
-                : timeB - timeA;
-        }
-
-        // Same date: preserve insertion order for oldest,
-        // and show more recently added transactions first for newest.
-        return sortOrder === "oldest"
-            ? a.originalIndex - b.originalIndex
-            : b.originalIndex - a.originalIndex;
+        return sortTransaction.value === "oldest"
+            ? timeA - timeB
+            : timeB - timeA;
     });
 
-    // ===== DISPLAY TRANSACTIONS =====
+    // Keep the original order for transactions with the same date
+    if (sortTransaction.value === "newest") {
+        sortedTransactions.reverse();
+    }
 
-    sortedTransactions.forEach(function(entry) {
-
-        const transaction = entry.transaction;
+    sortedTransactions.forEach(function(transaction) {
 
         const item = document.createElement("div");
         item.className = "transaction";
@@ -325,10 +288,9 @@ function displayTransactions() {
         info.className = "transaction-info";
 
         const title = document.createElement("strong");
-        title.textContent = transaction.description || "";
+        title.textContent = transaction.description;
 
         const date = document.createElement("small");
-
         date.textContent =
             (transaction.category || "Uncategorized") +
             " • " +
@@ -344,18 +306,13 @@ function displayTransactions() {
         const amount = document.createElement("span");
 
         amount.className =
-            transaction.type === "income"
-                ? "positive"
-                : "negative";
+            transaction.type === "income" ? "positive" : "negative";
 
         amount.textContent =
             (transaction.type === "income" ? "+ " : "- ") +
             formatMoney(transaction.amount);
 
-        // ===== EDIT BUTTON =====
-
         const editButton = document.createElement("button");
-
         editButton.type = "button";
         editButton.className = "edit-btn";
         editButton.textContent = "Edit";
@@ -364,10 +321,7 @@ function displayTransactions() {
             startEditTransaction(transaction.id);
         });
 
-        // ===== DELETE BUTTON =====
-
         const deleteButton = document.createElement("button");
-
         deleteButton.type = "button";
         deleteButton.className = "delete-btn";
         deleteButton.textContent = "Delete";
@@ -386,6 +340,7 @@ function displayTransactions() {
         transactionList.appendChild(item);
     });
 }
+
 
 /* =====================================
    PART 4 - EDIT, DELETE AND FILTERS
@@ -444,11 +399,8 @@ function deleteTransaction(id) {
     });
 
     if (editingTransactionId === id) {
-
         editingTransactionId = null;
-
         form.reset();
-
         submitTransaction.textContent = "+ Add Transaction";
         cancelEdit.style.display = "none";
     }
@@ -487,6 +439,7 @@ filterButtons.forEach(function(button) {
         displayTransactions();
     });
 });
+
 
 /* =====================================
    PART 5 - BUDGET, DARK MODE AND STARTUP
@@ -535,41 +488,28 @@ function updateBudget() {
     const budgetLeft = monthlyAllowance - monthlyExpenses;
 
     // Update budget details
-    budgetAmountDisplay.textContent =
-        formatMoney(monthlyAllowance);
-
-    monthlySpentDisplay.textContent =
-        formatMoney(monthlyExpenses);
-
-    budgetLeftDisplay.textContent =
-        formatMoney(budgetLeft);
+    budgetAmountDisplay.textContent = formatMoney(monthlyAllowance);
+    monthlySpentDisplay.textContent = formatMoney(monthlyExpenses);
+    budgetLeftDisplay.textContent = formatMoney(budgetLeft);
 
     // Update progress bar
     const percentage = monthlyAllowance > 0
         ? (monthlyExpenses / monthlyAllowance) * 100
         : 0;
 
-    budgetProgress.style.width =
-        Math.min(percentage, 100) + "%";
+    budgetProgress.style.width = Math.min(percentage, 100) + "%";
 
     // Update message
     if (monthlyAllowance === 0) {
-
         budgetMessage.textContent =
             "Add your allowance to start tracking your monthly budget.";
-
     } else if (percentage >= 100) {
-
         budgetMessage.textContent =
             "You have reached or exceeded your monthly allowance.";
-
     } else if (percentage >= 80) {
-
         budgetMessage.textContent =
             "Warning: You are getting close to your budget limit.";
-
     } else {
-
         budgetMessage.textContent =
             "You are within your monthly budget.";
     }
@@ -612,18 +552,10 @@ themeToggle.addEventListener("click", function() {
 
 function initializeApp() {
 
-    // Restore saved theme
-    const savedTheme = localStorage.getItem("allowanceTheme");
-
-    if (savedTheme === "dark") {
-        document.documentElement.classList.add("dark-mode");
-    } else {
-        document.documentElement.classList.remove("dark-mode");
-    }
-
     updateDashboard();
     displayTransactions();
     updateThemeButton();
+
 }
 
 initializeApp();
